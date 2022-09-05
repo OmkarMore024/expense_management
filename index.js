@@ -9,6 +9,7 @@ const {
 } = require("./start/db");
 // requiring the PORT number from the start/port file
 const { getPort } = require("./start/port");
+const { getAllRoutes } = require("./start/routes");
 
 app.use(express.json());
 
@@ -16,12 +17,8 @@ app.use(express.json());
 establishDatabaseConnection();
 
 // getting all routes defined in start/routes file
-// getAllRoutes(app);
-app.get("/", (req, res) => {
-  req.status(200).send("Running ");
-});
 
-app.use("/api/household", require("./routes/household"));
-app.use("/api/users", require("./routes/user"));
+getAllRoutes(app);
+
 // PORT number to listen to
 getPort(app);

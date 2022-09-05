@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const config = require("config");
 
 async function establishDatabaseConnection() {
-  await mongoose.connect("mongodb://localhost:27017/expense_management");
+  // await mongoose.connect(config.get("Mongo-DB-url"));
+  await mongoose.connect(config.get("Mongo-DB-url"));
   console.log("Connected to MongoDB!");
 }
 async function closeDatabaseConnection() {

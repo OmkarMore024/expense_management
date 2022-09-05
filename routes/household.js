@@ -24,6 +24,9 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  const { error } = validateHousehold(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
   try {
     const houseHold = new HouseHold({
       name: req.body.name,
@@ -39,6 +42,25 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(404).send(error);
   }
+});
+
+router.put("/:id",async (req,res)=>{
+  const { error } = validateCustomer(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const houseHold = await HouseHold.findByIdAndUpdate(
+    req.params.id,
+    { $set: { name: req.body.name } },
+    { new: true, runValidators: true }
+  );
+  if (!houseHold) return res.status(404).send("given id is not found");
+
+  res.send(houseHold);
+})
+router.delete("/:id",async (req,res)=>{
+    const houseHold=await HouseHold.findByIdAndDelete(req.params.id);
+    if(!houseHold) return res.status(404).send("The given HouseHolds not found");
+    res.send(houseHold);
 });
 
 module.exports = router;

@@ -8,8 +8,8 @@ router.get("/", async (req, res) => {
   res.status(200).send(users);
 });
 router.get("/:id", async (req, res) => {
-  const users = await User.findById(req.params.id);
-  res.status(200).send(users);
+  const user = await User.findById(req.params.id);
+  res.status(200).send(user);
 });
 
 router.post("/", async (req, res) => {
