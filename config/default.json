@@ -1,4 +1,4 @@
 {
-  // "Mongo-DB-url": "mongodb://localhost:27017/expense_management",
-  "Mongo-DB-url": "mongodb+srv://omkarmore:omkarmore12345678@cluster0.u5vo1.mongodb.net/expense_management?retryWrites=true&w=majority"
+  "Mongo-DB-url": "mongodb://localhost:27017/expense_management",
+  "jwtPrivateKey": "12345"
 }

@@ -1,7 +1,6 @@
 const express=require("express");
 const mongoose=require("mongoose");
 const Joi = require("joi");
-const ObjectId=require("joi-objectid")(Joi);
 
 const Schema = mongoose.Schema;
 

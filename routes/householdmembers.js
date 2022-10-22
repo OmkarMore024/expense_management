@@ -13,6 +13,10 @@ const {
   householdmembersSchema,
 } = require("../models/householdmembersModel.js");
 
+const auth = require("../middlewears/auth.js");
+const validateObjId = require("../middlewears/validateobjectId");
+const admin = require("../middlewears/admin");
+
 const app = express();
 app.use(express.json());
 
@@ -24,7 +28,7 @@ router.get("/", async (req, res) => {
   res.send(householdmembers);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjId, async (req, res) => {
   const householdmember = await Householdmember.findById(req.params.id);
   if (!householdmember)
     return res.status(404).send("HouseHoldsmember not found");
@@ -32,7 +36,7 @@ router.get("/:id", async (req, res) => {
   res.send(householdmember);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validatehouseHoldmembers(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -50,7 +54,7 @@ router.post("/", async (req, res) => {
     },
     user: {
       _id: user._id,
-      userName: user.firstName +" "+user.lastName,
+      userName: user.firstName + " " + user.lastName,
     },
   });
   await householdmember.save();
@@ -61,10 +65,10 @@ router.post("/", async (req, res) => {
 //   const householdmember = await Householdmember.findById(req.params.id);
 //   if (!householdmember) return res.status(404).send("Given id is not found");
 
-//   householdmember=new 
+//   householdmember=new
 // });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateObjId, async (req, res) => {
   const householdmember = await Householdmember.findByIdAndDelete(
     req.params.id
   );

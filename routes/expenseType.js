@@ -6,17 +6,21 @@ const {
 } = require("../models/expenseTypeModel");
 const router = express.Router();
 
+const auth = require("../middlewears/auth.js");
+const validateObjId = require("../middlewears/validateobjectId");
+const admin = require("../middlewears/admin");
+
 router.get("/", async (req, res) => {
   const expenseTypes = await ExpenseType.find({});
   res.status(200).send(expenseTypes);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjId, async (req, res) => {
   const expenseType = await ExpenseType.findById(req.params.id);
   res.status(200).send(expenseType);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validateExpenseType(req.body);
 
   if (error) return res.status(404).send(error.details[0].message);
@@ -28,7 +32,7 @@ router.post("/", async (req, res) => {
   res.status(200).send(expenseType);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, admin, validateObjId, async (req, res) => {
   let expenseType = await ExpenseType.findById(req.params.id);
   if (!expenseType)
     return res
@@ -45,7 +49,7 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(expenseType);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, admin, validateObjId, async (req, res) => {
   const expenseType = await ExpenseType.findById(req.params.id);
   if (!expenseType)
     return res

@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const auth = require("../middlewears/auth.js");
+const validateObjId = require("../middlewears/validateobjectId");
+const admin = require("../middlewears/admin");
+
 const {
   validateHousehold,
   HouseHold,
@@ -17,13 +21,13 @@ router.get("/", async (req, res) => {
   res.send(houseHolds);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjId, async (req, res) => {
   const houseHolds = await HouseHold.findById(req.params.id);
   if (!houseHolds) return res.status(404).send("HouseHolds not found");
   res.send(houseHolds);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth,async (req, res) => {
   const { error } = validateHousehold(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -44,7 +48,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id",async (req,res)=>{
+router.put("/:id",auth,validateObjId, async (req, res) => {
   const { error } = validateCustomer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -56,11 +60,11 @@ router.put("/:id",async (req,res)=>{
   if (!houseHold) return res.status(404).send("given id is not found");
 
   res.send(houseHold);
-})
-router.delete("/:id",async (req,res)=>{
-    const houseHold=await HouseHold.findByIdAndDelete(req.params.id);
-    if(!houseHold) return res.status(404).send("The given HouseHolds not found");
-    res.send(houseHold);
+});
+router.delete("/:id",auth,validateObjId, async (req, res) => {
+  const houseHold = await HouseHold.findByIdAndDelete(req.params.id);
+  if (!houseHold) return res.status(404).send("The given HouseHold not found");
+  res.send(houseHold);
 });
 
 module.exports = router;

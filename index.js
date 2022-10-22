@@ -16,8 +16,14 @@ app.use(express.json());
 //established the database connection to MongoDB
 establishDatabaseConnection();
 
-// getting all routes defined in start/routes file
+//db
+require("./start/cors")(app);
+//-->
+// require("./startup/login")();
 
+//import jwt file ,confi
+
+// getting all routes defined in start/routes file
 getAllRoutes(app);
 
 // PORT number to listen to
